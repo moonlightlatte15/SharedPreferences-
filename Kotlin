@@ -1,0 +1,52 @@
+package com.example.sharedpreferences
+
+import android.content.Context
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    private val sharedPrefFile = "mySharedPreferences"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Save Button: Store data in SharedPreferences
+        buttonSave.setOnClickListener {
+            val sharedPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            val id = editTextId.text.toString()
+            val name = editTextName.text.toString()
+
+            editor.putString("ID", id)
+            editor.putString("NAME", name)
+            editor.apply()
+        }
+
+        // View Button: Retrieve and display data from SharedPreferences
+        buttonView.setOnClickListener {
+            val sharedPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+
+            val savedId = sharedPreferences.getString("ID", "No ID saved")
+            val savedName = sharedPreferences.getString("NAME", "No Name saved")
+
+            textViewId.text = "Saved ID: $savedId"
+            textViewName.text = "Saved Name: $savedName"
+        }
+
+        // Clear Button: Remove stored data from SharedPreferences
+        buttonClear.setOnClickListener {
+            val sharedPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            editor.clear()
+            editor.apply()
+
+            textViewId.text = "Saved ID: "
+            textViewName.text = "Saved Name: "
+        }
+    }
+}
